@@ -2,13 +2,12 @@ FROM hashicorp/terraform as terraform
 
 FROM python:3.8
 
-RUN pip install --extra-index-url https://pip-test.techservices.illinois.edu/index/test \
-        sdg-test-behave-terraform
-
 COPY . /usr/local/src
 COPY --from=terraform /bin/terraform /usr/local/bin/
 
 WORKDIR /usr/local/src/test
+
+RUN pip install -r requirements.txt
 
 VOLUME /root/.aws
 

@@ -1,5 +1,5 @@
 REPO := $(shell basename $(shell git remote get-url origin) .git)
-ACCOUNT := 224588347132
+ACCOUNT := 621331288878
 CONTAINER := $(REPO)-tests
 
 # Code Snippet Source:
@@ -10,12 +10,12 @@ endif
 
 .PHONY: all test debug login build clean
 
-all: test
+all: login test
 
-test: login build
+test: build
 	docker run -it -v $(HOME)/.aws:/root/.aws:ro --rm $(CONTAINER)
 
-debug: login
+debug:
 	docker run -it -v $(HOME)/.aws:/root/.aws:ro --rm --entrypoint bash $(CONTAINER)
 
 login:

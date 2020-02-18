@@ -2,13 +2,18 @@ Feature: Test different tfvars configurations for the lb module with a public ti
     
     
     Background: Initialize testing for lb module with a public tier.
-        
+
+        Given the following variables
+            | key  | value                       |
+            #------|-----------------------------|
+            | name | behave-test-lb-${random:10} |
+
         Given terraform module 'lb'
-            | key             | value                     |
-            #-----------------|---------------------------|
-            | name            | "test-lb"                 |
-            | vpc             | "techservicesastest2-vpc" |
-            | tier            | "public"                  |
+            | key  | value                      |
+            #------|----------------------------|
+            | name | "${var.name}"              |
+            | vpc  | "techservicesasdrone1-vpc" |
+            | tier | "public"                   |
         
         Given terraform list 'ports'
         Given terraform append map to 'ports' list
@@ -167,7 +172,7 @@ Feature: Test different tfvars configurations for the lb module with a public ti
         Given terraform append map to 'alias' list
             | attr     | value                               |
             #----------|-------------------------------------|
-            | domain   | "as-test.techservices.illinois.edu" |
+            | domain   | "as-drone.techservices.illinois.edu" |
             | hostname | "lb"                                |
         Given terraform map 'tags'
             | tagname | value |

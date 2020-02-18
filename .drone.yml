@@ -4,3 +4,13 @@ pipeline:
     commands:
       - apk add make
       - make
+      - mkdir bin
+      - cp $(which terraform) bin/
+  test:
+    image: python:3.8
+    commands:
+      - export PATH="$PATH:$PWD/bin"
+      - export AWS_SHARED_CREDENTIALS_FILE="$PWD/test/aws/credentials"
+      - export AWS_PROFILE="as-aws-drone"
+      - pip install -r $PWD/test/requirements.txt
+      - behave test/features/ --no-capture --stop
