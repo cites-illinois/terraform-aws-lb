@@ -8,12 +8,16 @@
 # listener. This is not intended to be used except for delivering
 # error messages.
 resource "aws_lb_target_group" "default" {
-  name = var.name
-
-  port     = 80
-  protocol = "HTTP"
-
+  name        = var.name
+  port        = 80
+  protocol    = local.is_alb ? "HTTP" : "TCP"
   target_type = "ip"
   vpc_id      = data.aws_vpc.selected.id
-  tags        = merge({ Name = var.name }, var.tags)
+
+  stickiness {
+    enabled = local.is_alb
+    type    = "lb_cookie"
+  }
+
+  tags = merge({ Name = var.name }, var.tags)
 }

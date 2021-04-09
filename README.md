@@ -17,7 +17,7 @@ module "lb_name" {
   tier = "public"
   vpc  = "vpc_name"
 
-  alias = [ 
+  alias = [
     {
       hostname = "mylb"
       domain   = "example.com"
@@ -30,16 +30,16 @@ module "lb_name" {
 
   ports = {
     443 = {
-      protocol = "HTTPS" 
+      protocol = "HTTPS"
     },
 
     80 = {
-      protocol = "HTTP" 
-    }    
+      protocol = "HTTP"
+    }
   }
-  
+
   certificate_arn  = "certificate_arn"
-  ssl_policy       = "ssl_policy_name" 
+  ssl_policy       = "ssl_policy_name"
 }
 ```
 
@@ -50,7 +50,7 @@ module "lb_name" {
 
   name     = "lb_name"
   internal = true
-  
+
   tier     = "nat"
   vpc      = "vpc_name"
 
@@ -64,11 +64,11 @@ module "lb_name" {
   ports = [
     {
       port             = "port_number"
-      protocol         = "protocol_name 
+      protocol         = "protocol_name"
       certificate_arn  = "certificate_arn"
       ssl_policy       = "ssl_policy_name"
     }
-  ]  
+  ]
 }
 ```
 

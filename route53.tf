@@ -6,8 +6,8 @@ resource "aws_route53_record" "default" {
   type    = "A"
 
   alias {
-    name                   = element(concat(aws_lb.default.*.dns_name, aws_lb.user.*.dns_name), 0)
-    zone_id                = element(concat(aws_lb.default.*.zone_id, aws_lb.user.*.zone_id), 0)
+    name                   = aws_lb.default.dns_name
+    zone_id                = aws_lb.default.zone_id
     evaluate_target_health = true
   }
 }

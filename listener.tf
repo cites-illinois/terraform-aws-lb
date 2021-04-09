@@ -1,14 +1,16 @@
 locals {
-  ports = concat(var.ports, var.secure_ports)
+  # TODO: Make local variables for the Route 53 record FQDN itself.
+  certificate_arn = local.needs_certificate ? module.lb_certificate[aws_route53_record.default[0].fqdn].arn : null
 }
 
 resource "aws_lb_listener" "default" {
-  count             = length(local.ports)
-  load_balancer_arn = element(concat(aws_lb.default.*.arn, aws_lb.user.*.arn), 0)
-  port              = local.ports[count.index]["port"]
-  protocol          = local.ports[count.index]["protocol"]
-  ssl_policy        = local.ports[count.index]["protocol"] == "HTTPS" ? lookup(local.ports[count.index], "ssl_policy", var.ssl_policy) : ""
-  certificate_arn   = local.ports[count.index]["protocol"] == "HTTPS" ? lookup(local.ports[count.index], "certificate_arn", var.certificate_arn) : ""
+  for_each          = var.ports
+  load_balancer_arn = aws_lb.default.arn
+  port              = each.key
+  protocol          = each.value.protocol
+  ssl_policy        = local.needs_certificate && (each.value.protocol == "HTTPS") ? var.ssl_policy : null
+  # TODO: Need to remove key for certificate_arn in documentation and code.
+  certificate_arn = local.needs_certificate && (each.value.protocol == "HTTPS") ? local.certificate_arn : null
 
   default_action {
     target_group_arn = aws_lb_target_group.default.arn
